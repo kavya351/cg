@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Employee Login</title>
+  <link rel="stylesheet" href="style1.css" />
+</head>
+<body>
+  <div class="overlay">
+    <div class="main-container">
+      <header>
+        <h1>Center of Excellence</h1>
+      </header>
+
+      <div class="login-container">
+        <h3>Employee Login</h3>
+        <form id="loginForm">
+          <input type="text" id="employeeId" placeholder="Employee ID" required />
+          <input type="text" id="employeeName" placeholder="Employee Name" required />
+          <input type="submit" value="Login" />
+        </form>
+        <p id="errorMsg" class="error"></p>
+      </div>
+
+      <!-- Section to show booked seats after login -->
+      <div id="bookedSeatsDisplay" style="display:none;">
+        <h3>Already Booked Seats</h3>
+        <ul id="bookedList"></ul>
+        <button onclick="window.location.href='seating.html'">Go to Seat Booking</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>
