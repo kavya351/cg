@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Seating Arrangement</title>
+  <link rel="stylesheet" href="style1.css" />
+</head>
+<body>
+  <div class="overlay">
+    <div class="main-container">
+      <header>
+        <h1>Seating Arrangement</h1>
+      </header>
+
+      <div class="login-container">
+        <h3>Welcome, <span id="employeeNameDisplay"></span></h3>
+
+        <div id="currentSeatDisplay" style="margin: 10px 0; font-weight: bold;"></div>
+
+        <form id="seatForm" style="display: none;">
+          <select id="availableSeats" required>
+            <option value="">Select an available seat</option>
+          </select>
+          <input type="submit" value="Confirm New Seat" />
+        </form>
+
+        <button id="editSeatBtn" type="button" style="display: none;">Edit My Seat</button>
+        <button id="viewBooked" type="button">See Booked Seats</button>
+      </div>
+    </div>
+  </div>
+  <script src="seating.js"></script>
+</body>
+</html>
