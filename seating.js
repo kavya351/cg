@@ -9,25 +9,16 @@ rows.forEach(row => {
 });
 
 let bookedSeats = {};
-
-function resetBookingsDaily() {
-  const today = new Date().toISOString().split("T")[0];
-  const lastReset = localStorage.getItem("lastResetDate");
-
-  if (lastReset !== today) {
-    localStorage.removeItem("bookedSeats");
-    bookedSeats = {};
-    localStorage.setItem("lastResetDate", today);
-  }
-}
+const selectedDate = localStorage.getItem("selectedBookingDate") || new Date().toISOString().split("T")[0];
+const storageKey = `bookedSeats_${selectedDate}`;
 
 function loadBookings() {
-  const stored = localStorage.getItem("bookedSeats");
+  const stored = localStorage.getItem(storageKey);
   bookedSeats = stored ? JSON.parse(stored) : {};
 }
 
 function saveBookings() {
-  localStorage.setItem("bookedSeats", JSON.stringify(bookedSeats));
+  localStorage.setItem(storageKey, JSON.stringify(bookedSeats));
 }
 
 function getUserSeat(name) {
@@ -52,13 +43,13 @@ function populateAvailableSeats(currentUserSeat = "") {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const loggedInUser = localStorage.getItem("loggedInUser");
   const allowedNames = [
     "Subash", "Raghav", "Gautham", "Daison", "Hari", "Rahul", "Arun Sandeep", "Sumithra",
     "Monalisa", "Mythili", "Debora", "Shamshath", "Shanthini", "Ramya", "Tejas", "Anand",
     "Harsha", "Ankan", "Kavya", "Nausheen", "Sneha", "Yukthi", "Karthik", "Dhinakar"
   ];
 
-  const loggedInUser = localStorage.getItem("loggedInUser");
   if (!allowedNames.map(n => n.toLowerCase()).includes((loggedInUser || "").toLowerCase())) {
     alert("You are not allowed to access the seating system.");
     window.location.href = "employee_login.html";
@@ -67,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("employeeNameDisplay").textContent = loggedInUser;
 
-  resetBookingsDaily();
   loadBookings();
 
   const currentSeat = getUserSeat(loggedInUser);
@@ -76,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const editBtn = document.getElementById("editSeatBtn");
 
   if (currentSeat) {
-    currentSeatDisplay.textContent = `Your current seat: ${currentSeat}`;
+    currentSeatDisplay.textContent = `Your current seat for ${selectedDate}: ${currentSeat}`;
     editBtn.style.display = "inline-block";
   } else {
     seatForm.style.display = "block";
@@ -87,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
     seatForm.style.display = "block";
     populateAvailableSeats(currentSeat);
     editBtn.style.display = "none";
-    currentSeatDisplay.textContent = `You are editing your seat: ${currentSeat}`;
+    currentSeatDisplay.textContent = `You are editing your seat for ${selectedDate}: ${currentSeat}`;
   });
 
   seatForm.addEventListener("submit", (e) => {
@@ -96,23 +86,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!selectedSeat) return alert("Please select a seat.");
 
-    // If someone else booked it
     if (bookedSeats[selectedSeat] && bookedSeats[selectedSeat].toLowerCase() !== loggedInUser.toLowerCase()) {
       return alert(`Seat ${selectedSeat} is already booked by someone else.`);
     }
 
-    // Release previous seat
     const oldSeat = getUserSeat(loggedInUser);
     if (oldSeat) {
       delete bookedSeats[oldSeat];
     }
 
-    // Book new seat
     bookedSeats[selectedSeat] = loggedInUser;
     saveBookings();
 
-    alert(`Seat changed to ${selectedSeat}`);
-    window.location.reload(); // Refresh the UI
+    alert(`Seat changed to ${selectedSeat} for ${selectedDate}`);
+    window.location.reload();
   });
 
   const viewBtn = document.getElementById("viewBooked");

@@ -2,33 +2,103 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Seating Arrangement</title>
+  <title>Seat Booking</title>
   <link rel="stylesheet" href="style1.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fdfdfd;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      text-align: center;
+      color: #d84315;
+    }
+
+    .seats {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .seat {
+      padding: 12px;
+      text-align: center;
+      border-radius: 8px;
+      background: #e0e0e0;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+
+    .seat:hover {
+      background: #c8e6c9;
+    }
+
+    .seat.booked {
+      background: #ef9a9a;
+      cursor: not-allowed;
+    }
+
+    .status {
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+      color: green;
+    }
+
+    .btn-link {
+      display: inline-block;
+      margin: 10px auto;
+      text-align: center;
+      padding: 10px 16px;
+      background: #1976d2;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: block;
+      margin: 20px auto 0;
+      text-align: center;
+      padding: 10px 16px;
+      background: #ff7043;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-  <div class="overlay">
-    <div class="main-container">
-      <header>
-        <h1>Seating Arrangement</h1>
-      </header>
+  <div class="container">
+    <h2>Book Your Seat</h2>
 
-      <div class="login-container">
-        <h3>Welcome, <span id="employeeNameDisplay"></span></h3>
+    <!-- ✅ Seating Plan Button -->
+    <a href="tools_seating.html" target="_blank" class="btn-link">View Seating Plan</a>
 
-        <div id="currentSeatDisplay" style="margin: 10px 0; font-weight: bold;"></div>
+    <!-- Seat Grid -->
+    <div id="seatGrid" class="seats"></div>
+    <p id="status" class="status"></p>
 
-        <form id="seatForm" style="display: none;">
-          <select id="availableSeats" required>
-            <option value="">Select an available seat</option>
-          </select>
-          <input type="submit" value="Confirm New Seat" />
-        </form>
-
-        <button id="editSeatBtn" type="button" style="display: none;">Edit My Seat</button>
-        <button id="viewBooked" type="button">See Booked Seats</button>
-      </div>
-    </div>
+    <!-- Back to Dashboard -->
+    <a href="login.html" class="back-btn">Back to Dashboard</a>
   </div>
+
   <script src="seating.js"></script>
 </body>
 </html>

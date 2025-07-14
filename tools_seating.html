@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tools & Solutions Seating</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fdfdfd;
+      margin: 20px;
+      padding: 0;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #d84315;
+      margin-bottom: 10px;
+    }
+
+    .instruction {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    .info {
+      max-width: 600px;
+      margin: 0 auto 30px;
+      font-size: 14px;
+      background: #fff3e0;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid #ffc107;
+    }
+
+    .scroll-wrapper {
+      overflow-x: auto;
+      padding: 10px 0;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(6, 60px);
+      grid-gap: 10px;
+      justify-content: center;
+      min-width: 400px;
+      margin: 0 auto 30px;
+    }
+
+    .seat {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      color: #fff;
+      font-size: 14px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      white-space: pre-line;
+    }
+
+    .Cap360 { background-color: #757575; }       /* Grey */
+    .BREAD  { background-color: #bcaaa4; color: #000; }  /* Brown */
+    .Solutions { background-color: #90caf9; color: #000; }  /* Blue */
+    .DCC    { background-color: #aed581; color: #000; }   /* Green */
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 14px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .color-box {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+    }
+
+    .legend .Cap360 { background-color: #757575; }
+    .legend .BREAD  { background-color: #bcaaa4; border: 1px solid #666; }
+    .legend .Solutions { background-color: #90caf9; }
+    .legend .DCC    { background-color: #aed581; }
+
+    @media (max-width: 600px) {
+      .seat {
+        width: 48px;
+        height: 48px;
+        font-size: 12px;
+      }
+
+      .grid-container {
+        grid-template-columns: repeat(6, 48px);
+        grid-gap: 8px;
+        min-width: 320px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Tools & Solutions Seating</h1>
+  <p class="instruction">Please find the below seating plan:</p>
+
+  <div class="info">
+    <strong>Team Allocations:</strong><br>
+    • <span style="color:#aed581; font-weight: bold;">DCC</span>: Seats 23–26<br>
+    • <span style="color:#bcaaa4; font-weight: bold;">BREAD</span>: Seats 27–29, 38–40, 41–43<br>
+    • <span style="color:#1976d2; font-weight: bold;">Solutions</span>: Seats 30–37<br>
+    • <span style="color:#757575; font-weight: bold;">Cap360</span>: Seats 44–47
+  </div>
+
+  <div class="scroll-wrapper">
+    <div class="grid-container" id="seatingGrid"></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="color-box Cap360"></div> Cap360 (44–47)</div>
+    <div class="legend-item"><div class="color-box BREAD"></div> BREAD (27–29, 38–43)</div>
+    <div class="legend-item"><div class="color-box Solutions"></div> Solutions (30–37)</div>
+    <div class="legend-item"><div class="color-box DCC"></div> DCC (23–26)</div>
+  </div>
+
+  <script>
+    const layout = [
+      [47, 33, 34, null, null, null],
+      [46, 32, 35, null, null, null],
+      [45, 31, 36, null, 23, null],
+      [44, 30, 37, null, 24, null],
+      [43, 29, 38, null, 25, null],
+      [42, 28, 39, null, 26, null],
+      [41, 27, 40, null, null, null]
+    ];
+
+    const teamMap = {
+      DCC: [23, 24, 25, 26],
+      BREAD: [27, 28, 29, 38, 39, 40, 41, 42, 43], // ✅ updated
+      Solutions: [30, 31, 32, 33, 34, 35, 36, 37],
+      Cap360: [44, 45, 46, 47]
+    };
+
+    const getTeam = (num) => {
+      for (const team in teamMap) {
+        if (teamMap[team].includes(num)) return team;
+      }
+      return null;
+    };
+
+    const grid = document.getElementById("seatingGrid");
+
+    layout.forEach(row => {
+      row.forEach(seat => {
+        const div = document.createElement("div");
+        if (seat === null) {
+          div.style.visibility = "hidden";
+          div.style.width = "60px";
+          div.style.height = "60px";
+        } else {
+          const team = getTeam(seat);
+          div.classList.add("seat");
+          if (team) div.classList.add(team);
+          div.textContent = seat;
+        }
+        grid.appendChild(div);
+      });
+    });
+  </script>
+</body>
+</html>

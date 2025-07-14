@@ -4,32 +4,173 @@
   <meta charset="UTF-8" />
   <title>Employee Login</title>
   <link rel="stylesheet" href="style1.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fffaf0;
+      margin: 0;
+      padding: 0;
+    }
+
+    .overlay {
+      padding: 40px 20px;
+    }
+
+    .dashboard-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      padding: 20px 16px;
+      flex: 1 1 260px;
+      max-width: 300px;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.01);
+    }
+
+    .card h2 {
+      font-size: 18px;
+      text-align: center;
+      margin-bottom: 12px;
+      color: #d84315;
+    }
+
+    .login-box input[type="text"],
+    .login-box input[type="submit"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      border: 1px solid #ccc;
+    }
+
+    .login-box input[type="submit"] {
+      background: linear-gradient(to right, #ff7043, #ffa726);
+      color: white;
+      font-weight: bold;
+      border: none;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      background-color: #43a047;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .stats-box input[type="date"] {
+      width: 100%;
+      padding: 7px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      border: 1px solid #ccc;
+    }
+
+    .stats-box p {
+      font-size: 13px;
+      margin: 4px 0;
+      text-align: center;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto;
+      max-width: 240px;
+      height: 180px !important;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .admin-link {
+      display: block;
+      text-align: center;
+      margin: 30px auto 0;
+    }
+
+    .admin-link a {
+      display: inline-block;
+      padding: 10px 16px;
+      background: #6d4c41;
+      color: white;
+      font-weight: bold;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        max-width: 90%;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="overlay">
-    <div class="main-container">
-      <header>
-        <h1>Center of Excellence</h1>
-      </header>
+    <div class="dashboard-container">
 
-      <div class="login-container">
-        <h3>Employee Login</h3>
+      <!-- Login Box -->
+      <div class="card login-box">
+        <h2>Login</h2>
         <form id="loginForm">
           <input type="text" id="employeeId" placeholder="Employee ID" required />
           <input type="text" id="employeeName" placeholder="Employee Name" required />
           <input type="submit" value="Login" />
         </form>
+        <button id="bookSeatBtn" style="display: none;">Book a Seat</button>
         <p id="errorMsg" class="error"></p>
       </div>
 
-      <!-- Section to show booked seats after login -->
-      <div id="bookedSeatsDisplay" style="display:none;">
-        <h3>Already Booked Seats</h3>
-        <ul id="bookedList"></ul>
-        <button onclick="window.location.href='seating.html'">Go to Seat Booking</button>
+      <!-- Daily Stats -->
+      <div class="card stats-box">
+        <h2>Today’s Stats</h2>
+        <label for="bookingDate">Date:</label>
+        <input type="date" id="bookingDate" />
+        <p>Total: <span id="totalSeats"></span></p>
+        <p>Booked: <span id="bookedSeats"></span></p>
+        <p>Left: <span id="availableSeats"></span></p>
+        <canvas id="seatsChart"></canvas>
       </div>
+
+      <!-- Weekly Chart -->
+      <div class="card stats-box">
+        <h2>Weekly Trend</h2>
+        <canvas id="weeklyChart"></canvas>
+      </div>
+
+    </div>
+
+    <!-- Admin Link -->
+    <div class="admin-link">
+      <a href="admin.html">Go to Admin Page</a>
     </div>
   </div>
+
+
 
   <script src="login.js"></script>
 </body>

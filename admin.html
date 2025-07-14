@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin - All Bookings</title>
+  <link rel="stylesheet" href="style1.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fffaf0;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #d84315;
+    }
+
+    .controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .bookings {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .bookings ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .bookings li {
+      margin: 6px 0;
+      padding: 6px;
+      border-bottom: 1px solid #eee;
+    }
+
+    button {
+      margin: 0 8px;
+      padding: 8px 16px;
+      background: #ffa726;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #ff7043;
+    }
+  </style>
+</head>
+<body>
+  <h2>Admin - All Bookings</h2>
+  <div class="controls">
+    <button onclick="downloadBookings()">Download Bookings</button>
+    <button onclick="window.print()">Print</button>
+    <button onclick="clearAllBookings()">Clear All</button>
+  </div>
+  <div class="bookings">
+    <ul id="bookingList"></ul>
+  </div>
+
+  <script>
+    function loadBookings() {
+      const list = document.getElementById("bookingList");
+      list.innerHTML = "";
+      const bookings = [];
+
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith("bookedSeats_")) {
+          const date = key.replace("bookedSeats_", "");
+          const data = JSON.parse(localStorage.getItem(key));
+
+          for (const [seat, name] of Object.entries(data)) {
+            bookings.push({ date, seat, name });
+          }
+        }
+      }
+
+      if (bookings.length === 0) {
+        list.innerHTML = "<li>No bookings found.</li>";
+      } else {
+        bookings.sort((a, b) => a.date.localeCompare(b.date));
+        bookings.forEach(b => {
+          const li = document.createElement("li");
+          li.textContent = `${b.date}: ${b.seat} - ${b.name}`;
+          list.appendChild(li);
+        });
+      }
+    }
+
+    function clearAllBookings() {
+      const confirmed = confirm("Are you sure you want to clear all bookings?");
+      if (confirmed) {
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key.startsWith("bookedSeats_")) {
+            keysToRemove.push(key);
+          }
+        }
+        keysToRemove.forEach(k => localStorage.removeItem(k));
+        alert("All bookings cleared.");
+        loadBookings();
+      }
+    }
+
+    function downloadBookings() {
+      const lines = ["Date,Seat,Employee"];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith("bookedSeats_")) {
+          const date = key.replace("bookedSeats_", "");
+          const data = JSON.parse(localStorage.getItem(key));
+          for (const [seat, name] of Object.entries(data)) {
+            lines.push(`${date},${seat},${name}`);
+          }
+        }
+      }
+      const csv = lines.join("\n");
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "all_bookings.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    window.onload = loadBookings;
+  </script>
+</body>
+</html>
